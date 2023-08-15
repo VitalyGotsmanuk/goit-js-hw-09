@@ -1,0 +1,2 @@
+!function(){var t={start:document.querySelector('[data-action="start"]'),stop:document.querySelector('[data-action="stop"]'),bodyColor:document.querySelector("body"),butn:document.querySelectorAll("button")};t.start.addEventListener("click",(function(t){console.log(t.currentTarget)})),t.stop.addEventListener("click",(function(t){console.log(t.currentTarget)}))}();
+//# sourceMappingURL=01-color-switcher.63374ba9.js.map
