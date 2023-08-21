@@ -39,3 +39,4 @@ function getRandomHexColor() {
 function randmColor(){
    elements.bodyColor.style.backgroundColor = getRandomHexColor();
 }; // Функція присвоєння кольору - фону сторінки. МОжливо можна спростити, але працює
+
