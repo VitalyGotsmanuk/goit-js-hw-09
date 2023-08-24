@@ -1,7 +1,7 @@
-import flatpickr from "flatpickr";
+import flatpickr from "flatpickr"; //бібліотеку flatpickr для того, щоб дозволити користувачеві кросбраузерно вибрати кінцеву дату і час в одному елементі інтерфейсу
 // Додатковий імпорт стилів
 import "flatpickr/dist/flatpickr.min.css";
-import Notiflix from 'notiflix';
+import Notiflix from 'notiflix'; // Для відображення повідомлень користувачеві
 //console.log(Notiflix);
 
 
