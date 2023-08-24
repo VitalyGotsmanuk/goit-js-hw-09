@@ -2,15 +2,38 @@ import flatpickr from "flatpickr";
 // Додатковий імпорт стилів
 import "flatpickr/dist/flatpickr.min.css";
 
+//console.log(flatpickr);
+
 const elements = {
+  input: document.querySelector(`#datetime-picker`),
+  start: document.querySelector(`[data-start]`),
+  timeDays: document.querySelector(`[data-days]`),
+  timeHours: document.querySelector(`[data-hours]`),
+  timeMinutes: document.querySelector(`[data-minutes]`),
+  timeSeconds: document.querySelector(`[data-seconds]`), 
 
     //: document.querySelector(`[data-start]`),
     //: document.querySelector(`[data-stop]`), 
     //: document.querySelector(`body`),
-   
 }
 
-//console.log(flatpickr);
+const currentDay = new Date ();
+//console.log(currentDay.getDay());
+
+console.log(elements.timeDays);
+
+elements.start.disabled = `true`;
+let timerId = null;
+
+flatpickr(elements.input, {
+  enableTime: true,
+  dateFormat: "d-m-Y H:i",
+  time_24hr: true,
+
+});
+
+
+
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -31,9 +54,8 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+//console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+//console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+//console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
-const currentDay = new Date ();
-console.log(currentDay.getDay());
+
