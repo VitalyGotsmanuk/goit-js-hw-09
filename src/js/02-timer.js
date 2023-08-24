@@ -4,37 +4,6 @@ import "flatpickr/dist/flatpickr.min.css";
 
 //console.log(flatpickr);
 
-const elements = {
-  input: document.querySelector(`#datetime-picker`),
-  start: document.querySelector(`[data-start]`),
-  timeDays: document.querySelector(`[data-days]`),
-  timeHours: document.querySelector(`[data-hours]`),
-  timeMinutes: document.querySelector(`[data-minutes]`),
-  timeSeconds: document.querySelector(`[data-seconds]`), 
-
-    //: document.querySelector(`[data-start]`),
-    //: document.querySelector(`[data-stop]`), 
-    //: document.querySelector(`body`),
-}
-
-const currentDay = new Date ();
-//console.log(currentDay.getDay());
-
-console.log(elements.timeDays);
-
-elements.start.disabled = `true`;
-let timerId = null;
-
-flatpickr(elements.input, {
-  enableTime: true,
-  dateFormat: "d-m-Y H:i",
-  time_24hr: true,
-
-});
-
-
-
-
 function convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
@@ -52,10 +21,63 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
-}
-
+};
 //console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 //console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
 //console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
+function addLeadingZero(value) {
+  return value.toString().padStart(2, `0`);
+};
+
+const elements = {
+  input: document.querySelector(`#datetime-picker`),
+  startBtn: document.querySelector(`button[data-start]`),
+  timeDays: document.querySelector(`span[data-days]`),
+  timeHours: document.querySelector(`span[data-hours]`),
+  timeMinutes: document.querySelector(`span[data-minutes]`),
+  timeSeconds: document.querySelector(`span[data-seconds]`), 
+}
+
+elements.startBtn.disabled = `true`;
+let timerId = null;
+const currentDay = new Date(); //Поточна дата
+
+//let targetDate = new Date(); // Дата в майбутньому
+
+flatpickr(elements.input, {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+
+  onClose(selectedDates) {
+        
+    if (selectedDates[0].getTime() - currentDay.getTime() < 0){
+      window.alert("Please choose a date in the future");
+    } else {
+      elements.startBtn.disabled = ``;
+      elements.startBtn.addEventListener(`click`, () => {
+       
+        timerId = setInterval (() =>{
+          const currentTime = new Date();
+          const ms = selectedDates[0].getTime() - currentTime.getTime();
+          
+          console.log(ms);
+
+          elements.timeDays.textContent = addLeadingZero(convertMs(ms).days);
+          elements.timeHours.textContent = addLeadingZero(convertMs(ms).hours);
+          elements.timeMinutes.textContent = addLeadingZero(convertMs(ms).minutes);
+          elements.timeSeconds.textContent = addLeadingZero(convertMs(ms).seconds);
+
+          if (ms < 1000 ){
+            clearInterval (timerId)
+          }
+        }, 1000);
+
+      });
+    }
+    //console.log(targetDate);
+  },
+});
 
