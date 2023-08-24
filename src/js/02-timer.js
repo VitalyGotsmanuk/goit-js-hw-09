@@ -1,11 +1,12 @@
 import flatpickr from "flatpickr";
 // Додатковий імпорт стилів
 import "flatpickr/dist/flatpickr.min.css";
+import Notiflix from 'notiflix';
+//console.log(Notiflix);
 
-//console.log(flatpickr);
 
 function convertMs(ms) {
-  // Number of milliseconds per unit of time
+  // Number of milliseconds per unit of time - ОТримує мілісеккунди, та конвертує їх у дні, години, хвилини, сенкунди.
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
@@ -28,7 +29,7 @@ function convertMs(ms) {
 
 function addLeadingZero(value) {
   return value.toString().padStart(2, `0`);
-};
+}; // Функція додає 0 перед цифрами 1-9, 0 
 
 const elements = {
   input: document.querySelector(`#datetime-picker`),
@@ -39,10 +40,9 @@ const elements = {
   timeSeconds: document.querySelector(`span[data-seconds]`), 
 }
 
-elements.startBtn.disabled = `true`;
+elements.startBtn.disabled = `true`; //кнопка старт неактивна
 let timerId = null;
 const currentDay = new Date(); //Поточна дата
-
 //let targetDate = new Date(); // Дата в майбутньому
 
 flatpickr(elements.input, {
@@ -52,24 +52,23 @@ flatpickr(elements.input, {
   minuteIncrement: 1,
 
   onClose(selectedDates) {
-        
+    // (selectedDates[0] Дата в майбутньому, 
     if (selectedDates[0].getTime() - currentDay.getTime() < 0){
-      window.alert("Please choose a date in the future");
+      Notiflix.Report.warning('Worning', 'Please choose a date in the future', 'Close');
+      //window.alert("Please choose a date in the future");
+
     } else {
-      elements.startBtn.disabled = ``;
+      elements.startBtn.disabled = ``; //кнопка старт активна
       elements.startBtn.addEventListener(`click`, () => {
        
         timerId = setInterval (() =>{
           const currentTime = new Date();
-          const ms = selectedDates[0].getTime() - currentTime.getTime();
-          
-          console.log(ms);
-
+          const ms = selectedDates[0].getTime() - currentTime.getTime();// getTime() додаємо, щоб отримати мілісекунди
+          //console.log(ms);
           elements.timeDays.textContent = addLeadingZero(convertMs(ms).days);
           elements.timeHours.textContent = addLeadingZero(convertMs(ms).hours);
           elements.timeMinutes.textContent = addLeadingZero(convertMs(ms).minutes);
           elements.timeSeconds.textContent = addLeadingZero(convertMs(ms).seconds);
-
           if (ms < 1000 ){
             clearInterval (timerId)
           }
