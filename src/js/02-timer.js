@@ -4,7 +4,6 @@ import "flatpickr/dist/flatpickr.min.css";
 import Notiflix from 'notiflix'; // Для відображення повідомлень користувачеві
 //console.log(Notiflix);
 
-
 function convertMs(ms) {
   // Number of milliseconds per unit of time - ОТримує мілісеккунди, та конвертує їх у дні, години, хвилини, сенкунди.
   const second = 1000;
@@ -34,11 +33,15 @@ function addLeadingZero(value) {
 const elements = {
   input: document.querySelector(`#datetime-picker`),
   startBtn: document.querySelector(`button[data-start]`),
+  timer: document.querySelector(`.timer`),
   timeDays: document.querySelector(`span[data-days]`),
   timeHours: document.querySelector(`span[data-hours]`),
   timeMinutes: document.querySelector(`span[data-minutes]`),
   timeSeconds: document.querySelector(`span[data-seconds]`), 
 }
+
+//console.log(elements.timer);
+//elements.input.disabled = `true`;
 
 elements.startBtn.disabled = `true`; //кнопка старт неактивна
 let timerId = null;
@@ -54,13 +57,15 @@ flatpickr(elements.input, {
   onClose(selectedDates) {
     // (selectedDates[0] Дата в майбутньому, 
     if (selectedDates[0].getTime() - currentDay.getTime() < 0){
-      Notiflix.Report.warning('Worning', 'Please choose a date in the future', 'Close');
+      Notiflix.Report.warning('Warning', 'Please choose a date in the future', 'Close');
+      
       //window.alert("Please choose a date in the future");
-
     } else {
       elements.startBtn.disabled = ``; //кнопка старт активна
+
       elements.startBtn.addEventListener(`click`, () => {
-       
+        elements.input.disabled = `true`; //Інпут неактивний
+
         timerId = setInterval (() =>{
           const currentTime = new Date();
           const ms = selectedDates[0].getTime() - currentTime.getTime();// getTime() додаємо, щоб отримати мілісекунди
@@ -69,8 +74,11 @@ flatpickr(elements.input, {
           elements.timeHours.textContent = addLeadingZero(convertMs(ms).hours);
           elements.timeMinutes.textContent = addLeadingZero(convertMs(ms).minutes);
           elements.timeSeconds.textContent = addLeadingZero(convertMs(ms).seconds);
+          elements.timer.style.color = `red`;
           if (ms < 1000 ){
             clearInterval (timerId)
+            elements.input.disabled = ``; //Інпут активний
+            elements.timer.style.color = `green`;
           }
         }, 1000);
 

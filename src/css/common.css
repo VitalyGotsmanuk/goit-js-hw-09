@@ -32,7 +32,7 @@ img {
 
 .value {
   font-size: 56px;
-  color: darkred;
+  /* color: darkred; */
 }
 
 .label {
